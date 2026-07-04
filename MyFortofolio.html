@@ -2636,7 +2636,7 @@
             badge.tabIndex = 0;
 
             const img = document.createElement('img');
-            img.src = `https://cdn.simpleicons.org/${item.slug}/7ec8ff`;
+            img.src = `https://cdn.simpleicons.org/${item.slug}`;
             img.alt = item.name;
             img.loading = 'lazy';
             img.onerror = function () {
@@ -2685,12 +2685,10 @@
 
         const trackLeft = document.getElementById('marqueeTrackLeft');
         const trackRight = document.getElementById('marqueeTrackRight');
-        leftItems.forEach(item => trackLeft.appendChild(makeSkillBadge(item)));
-        rightItems.forEach(item => trackRight.appendChild(makeSkillBadge(item)));
-
-        document.querySelectorAll('.marquee-track').forEach(track => {
-            track.innerHTML += track.innerHTML;
-        });
+        // Duplicate the item lists (not the DOM/innerHTML) so every badge gets
+        // its own fresh event listeners for the hover/click name tooltip.
+        [...leftItems, ...leftItems].forEach(item => trackLeft.appendChild(makeSkillBadge(item)));
+        [...rightItems, ...rightItems].forEach(item => trackRight.appendChild(makeSkillBadge(item)));
 
         /* ---------- GitHub contribution heatmap (real data via public API) ---------- */
         const GITHUB_USERNAME = 'NathanaelSianipar';
