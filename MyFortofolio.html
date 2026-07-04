@@ -326,7 +326,8 @@
             align-items: center;
             justify-content: center;
             font-family: var(--mono);
-            transition: opacity 0.6s ease, visibility 0.6s ease;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+            overflow: hidden;
         }
 
         #boot.hidden {
@@ -334,37 +335,124 @@
             visibility: hidden;
         }
 
+        #boot::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 50% 40%, rgba(47, 143, 255, 0.16), transparent 55%),
+                repeating-linear-gradient(to bottom, rgba(47, 143, 255, 0.05) 0px, rgba(47, 143, 255, 0.05) 1px, transparent 2px, transparent 3px);
+            pointer-events: none;
+        }
+
         .boot-box {
-            width: min(540px, 86vw);
+            width: min(420px, 86vw);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            z-index: 1;
         }
 
-        .boot-box .line {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            opacity: 0;
-            animation: fadeIn 0.3s ease forwards;
+        .boot-visual {
+            position: relative;
+            width: 128px;
+            height: 128px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 34px;
         }
 
-        .boot-box .line span {
+        .boot-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px solid rgba(47, 143, 255, 0.35);
+            border-top-color: var(--blue-bright);
+            animation: bootSpin 2.2s linear infinite;
+        }
+
+        .boot-ring-2 {
+            inset: 16px;
+            border-color: rgba(126, 230, 196, 0.25);
+            border-bottom-color: var(--mint);
+            animation: bootSpin 1.5s linear infinite reverse;
+        }
+
+        @keyframes bootSpin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .boot-logo {
+            font-family: var(--display);
+            font-weight: 700;
+            font-size: 1.7rem;
             color: var(--blue-bright);
-            text-shadow: 0 0 8px rgba(126, 200, 255, 0.6);
+            text-shadow: 0 0 22px rgba(126, 200, 255, 0.65);
+            animation: bootPulse 1.8s ease-in-out infinite;
+        }
+
+        @keyframes bootPulse {
+
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1.08);
+            }
+        }
+
+        .boot-name {
+            font-family: var(--display);
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--text);
+            letter-spacing: 0.01em;
+            margin-bottom: 6px;
+        }
+
+        .boot-status {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            min-height: 1.4em;
+            margin-bottom: 22px;
+            text-align: center;
+        }
+
+        .boot-status .ok {
+            color: var(--mint);
         }
 
         .boot-bar {
+            width: 100%;
             height: 3px;
             background: #101a2c;
             border-radius: 2px;
-            margin-top: 18px;
             overflow: hidden;
+            position: relative;
         }
 
         .boot-bar-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--blue), var(--blue-bright));
+            background: linear-gradient(90deg, var(--blue), var(--blue-bright), var(--mint));
             box-shadow: 0 0 14px var(--blue-bright);
             transition: width 0.25s ease;
+        }
+
+        .boot-pct {
+            margin-top: 12px;
+            font-size: 0.78rem;
+            color: var(--blue-bright);
+            letter-spacing: 0.06em;
+            text-shadow: 0 0 8px rgba(126, 200, 255, 0.5);
         }
 
         @keyframes fadeIn {
@@ -863,6 +951,34 @@
             margin-top: 18px;
         }
 
+        .hero-stats {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 26px;
+        }
+
+        .hero-stat {
+            display: flex;
+            align-items: baseline;
+            gap: 6px;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            padding: 9px 14px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: rgba(47, 143, 255, 0.05);
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .hero-stat strong {
+            color: var(--blue-bright);
+            font-size: 0.92rem;
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(126, 200, 255, 0.35);
+        }
+
         .hero-cta {
             display: flex;
             gap: 14px;
@@ -912,6 +1028,35 @@
         }
 
         /* ---------- EDITOR WINDOW ---------- */
+        .editor-shell {
+            position: relative;
+        }
+
+        .editor-aura {
+            position: absolute;
+            inset: -12% -8%;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                radial-gradient(38% 46% at 18% 12%, rgba(47, 143, 255, 0.35), transparent 70%),
+                radial-gradient(30% 38% at 88% 82%, rgba(126, 230, 196, 0.22), transparent 70%);
+            filter: blur(34px);
+            opacity: 0.8;
+            animation: auraDrift 9s ease-in-out infinite;
+        }
+
+        @keyframes auraDrift {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate(2%, -3%) scale(1.05);
+            }
+        }
+
         .editor {
             background: var(--editor-bg);
             border: 1px solid var(--border);
@@ -919,6 +1064,7 @@
             overflow: hidden;
             box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(47, 143, 255, 0.15);
             position: relative;
+            z-index: 1;
         }
 
         .editor::before {
@@ -1420,6 +1566,18 @@
             padding: 26px;
             overflow-x: auto;
             transition: background-color 0.4s ease, border-color 0.4s ease;
+            position: relative;
+        }
+
+        .contrib-swipe-hint {
+            display: none;
+            font-family: var(--mono);
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            margin-top: -6px;
+            margin-bottom: 14px;
+            align-items: center;
+            gap: 6px;
         }
 
         .contrib-top {
@@ -1968,6 +2126,232 @@
                 justify-content: center;
             }
         }
+
+        /* ================= MOBILE POLISH PASS ================= */
+        @media (max-width:900px) {
+
+            /* Tighter, tap-friendly header */
+            .nav-inner {
+                height: 56px;
+                gap: 6px;
+            }
+
+            .logo {
+                font-size: 0.86rem;
+            }
+
+            .lang-current {
+                padding: 7px 9px;
+                font-size: 0.72rem;
+            }
+
+            .theme-toggle,
+            .nav-toggle {
+                width: 38px;
+                height: 38px;
+            }
+
+            .lang-dropdown {
+                min-width: 136px;
+            }
+        }
+
+        @media (max-width:760px) {
+
+            /* Hero breathes better on phones */
+            .hero {
+                padding: 40px 0 44px;
+            }
+
+            .eyebrow {
+                font-size: 0.78rem;
+            }
+
+            .hero p.lead {
+                font-size: 0.98rem;
+                margin-top: 14px;
+            }
+
+            .hero-stats {
+                margin-top: 20px;
+                gap: 8px;
+            }
+
+            .hero-stat {
+                padding: 7px 12px;
+                font-size: 0.72rem;
+            }
+
+            .hero-cta {
+                margin-top: 22px;
+                gap: 10px;
+            }
+
+            .editor-aura {
+                filter: blur(22px);
+                opacity: 0.6;
+            }
+
+            .editor-body {
+                min-height: 180px;
+            }
+
+            /* Section rhythm */
+            .section-head {
+                margin-bottom: 28px;
+            }
+
+            .section-tag {
+                font-size: 0.74rem;
+            }
+
+            /* Comment block + facts breathe better stacked */
+            .comment-block {
+                padding: 18px;
+                font-size: 0.88rem;
+            }
+
+            .fact {
+                font-size: 0.8rem;
+                padding: 9px 0;
+            }
+
+            /* Education cards */
+            .edu-logo-wrap {
+                width: 72px;
+                height: 72px;
+                border-radius: 12px;
+            }
+
+            .edu-info h3 {
+                font-size: 1.1rem;
+            }
+
+            /* Skill badges slightly smaller so more are visible at once */
+            .skill-badge {
+                width: 68px;
+                height: 68px;
+                border-radius: 16px;
+            }
+
+            .skill-badge img {
+                width: 34px;
+                height: 34px;
+            }
+
+            /* Contribution heatmap: show the swipe hint, keep the grid legible */
+            .contrib-wrap {
+                padding: 18px 18px 20px;
+            }
+
+            .contrib-swipe-hint.visible {
+                display: flex;
+            }
+
+            .contrib-grid-wrap {
+                -webkit-mask-image: linear-gradient(90deg, #000 92%, transparent);
+                mask-image: linear-gradient(90deg, #000 92%, transparent);
+            }
+
+            .contrib-summary {
+                font-size: 0.8rem;
+            }
+
+            /* Projects: single column reads much better than a cramped 2-up */
+            .project-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .project-card {
+                padding: 20px;
+            }
+
+            .project-thumb {
+                width: calc(100% + 40px);
+                margin: -20px -20px 16px -20px;
+            }
+
+            /* Timeline tightened */
+            .timeline {
+                padding-left: 22px;
+            }
+
+            .timeline-item {
+                padding-bottom: 30px;
+            }
+
+            .timeline-item::before {
+                left: -22px;
+            }
+
+            /* Footer: centered, friendlier stack */
+            .footer-brand,
+            .footer-nav-col,
+            .footer-contact-col {
+                text-align: center;
+            }
+
+            .footer-desc {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .footer-nav-col ul {
+                align-items: center;
+            }
+
+            .footer-contact-list {
+                align-items: center;
+            }
+
+            .footer-contact-list li {
+                display: flex;
+                gap: 6px;
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+
+            .footer-socials {
+                justify-content: center;
+            }
+
+            .footer-col h4::after {
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width:420px) {
+
+            .boot-visual {
+                width: 104px;
+                height: 104px;
+                margin-bottom: 26px;
+            }
+
+            .boot-logo {
+                font-size: 1.4rem;
+            }
+
+            .boot-name {
+                font-size: 0.92rem;
+            }
+
+            .hero-stat {
+                flex: 1 1 auto;
+                justify-content: center;
+            }
+
+            .about-facts {
+                gap: 10px;
+            }
+
+            .tag-row span {
+                font-size: 0.78rem;
+                padding: 6px 11px;
+            }
+        }
     </style>
 </head>
 
@@ -1975,14 +2359,17 @@
 
     <div id="boot">
         <div class="boot-box">
-            <div class="line" style="animation-delay:0s">&gt; booting <span>Nathan</span> ...</div>
-            <div class="line" style="animation-delay:0.15s">&gt; loading modules: php, javascript, html
-                <span>[ok]</span></div>
-            <div class="line" style="animation-delay:0.3s">&gt; syncing github contributions <span>[ok]</span></div>
-            <div class="line" style="animation-delay:0.45s">&gt; rendering interface...</div>
+            <div class="boot-visual">
+                <div class="boot-ring"></div>
+                <div class="boot-ring boot-ring-2"></div>
+                <div class="boot-logo">&lt;/&gt;</div>
+            </div>
+            <p class="boot-name">Nathanael Septian Sianipar</p>
+            <p class="boot-status" id="bootStatus">menyiapkan antarmuka...</p>
             <div class="boot-bar">
                 <div class="boot-bar-fill" id="bootFill"></div>
             </div>
+            <p class="boot-pct" id="bootPct">0%</p>
         </div>
     </div>
 
@@ -2056,6 +2443,11 @@
                             data-i18n="hero.title_post">Full-Stack Developer.</span></h1>
                     <p class="lead" data-i18n="hero.lead">Saya seorang mahasiswa yang ingin menjadi Fullstack Developer.
                     </p>
+                    <div class="hero-stats">
+                        <span class="hero-stat"><strong>1+</strong> tahun ngoding</span>
+                        <span class="hero-stat"><strong>4+</strong> proyek dibangun</span>
+                        <span class="hero-stat"><strong>6</strong> bahasa favorit</span>
+                    </div>
                     <div class="hero-cta">
                         <a href="#proyek" class="btn btn-primary magnetic" data-i18n="hero.cta_primary">Lihat proyek
                             saya →</a>
@@ -2063,14 +2455,17 @@
                     </div>
                 </div>
 
-                <div class="editor" id="editor">
-                    <div class="editor-topbar">
-                        <div class="dots"><span></span><span></span><span></span></div>
-                        <div class="tabs" id="tabs"></div>
-                    </div>
-                    <div class="editor-body">
-                        <div class="line-numbers" id="lineNumbers"></div>
-                        <pre class="code-pane" id="codePane"></pre>
+                <div class="editor-shell">
+                    <div class="editor-aura"></div>
+                    <div class="editor" id="editor">
+                        <div class="editor-topbar">
+                            <div class="dots"><span></span><span></span><span></span></div>
+                            <div class="tabs" id="tabs"></div>
+                        </div>
+                        <div class="editor-body">
+                            <div class="line-numbers" id="lineNumbers"></div>
+                            <pre class="code-pane" id="codePane"></pre>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2190,6 +2585,7 @@
                     </div>
                     <div id="contribLoading" class="contrib-state" data-i18n="contrib.loading">Mengambil data GitHub...
                     </div>
+                    <p class="contrib-swipe-hint" id="contribSwipeHint">← geser untuk lihat semua →</p>
                     <div class="contrib-grid-wrap" id="contribGridWrap" style="display:none">
                         <div>
                             <div class="contrib-months" id="contribMonths"></div>
@@ -2394,12 +2790,32 @@
         /* ---------- Boot loader ---------- */
         const bootEl = document.getElementById('boot');
         const bootFill = document.getElementById('bootFill');
+        const bootPctEl = document.getElementById('bootPct');
+        const bootStatusEl = document.getElementById('bootStatus');
+        const bootMessages = [
+            'menyiapkan antarmuka...',
+            'memuat modul: php, javascript, html',
+            'menyinkronkan kontribusi github',
+            'merender komponen visual',
+            'hampir selesai...'
+        ];
         let bootPct = 0;
+        let bootMsgIndex = 0;
+        bootStatusEl.innerHTML = bootMessages[0];
+        const bootMsgInterval = setInterval(() => {
+            bootMsgIndex = (bootMsgIndex + 1) % bootMessages.length;
+            bootStatusEl.innerHTML = bootMessages[bootMsgIndex];
+        }, 650);
         const bootInterval = setInterval(() => {
-            bootPct += Math.random() * 18 + 8;
+            bootPct += Math.random() * 16 + 7;
             if (bootPct >= 100) { bootPct = 100; clearInterval(bootInterval); }
             bootFill.style.width = bootPct + '%';
-            if (bootPct >= 100) { setTimeout(() => bootEl.classList.add('hidden'), 350); }
+            bootPctEl.textContent = Math.round(bootPct) + '%';
+            if (bootPct >= 100) {
+                clearInterval(bootMsgInterval);
+                bootStatusEl.innerHTML = 'selesai <span class="ok">[ok]</span>';
+                setTimeout(() => bootEl.classList.add('hidden'), 400);
+            }
         }, 180);
         setTimeout(() => bootEl.classList.add('hidden'), 3500);
 
@@ -2789,6 +3205,8 @@
             contribLoadingEl.style.display = 'none';
             contribGridWrapEl.style.display = '';
             contribLegendEl.style.display = '';
+            const swipeHintEl = document.getElementById('contribSwipeHint');
+            if (swipeHintEl) swipeHintEl.classList.add('visible');
 
             const contribObserver = new IntersectionObserver((entries) => {
                 entries.forEach(e => {
