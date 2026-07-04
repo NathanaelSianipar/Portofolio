@@ -1289,49 +1289,6 @@
         }
 
         /* ---------- SKILLS ---------- */
-        .lang-bar {
-            display: flex;
-            height: 14px;
-            border-radius: 8px;
-            overflow: hidden;
-            margin-bottom: 20px;
-            border: 1px solid var(--border);
-        }
-
-        .lang-bar div {
-            height: 100%;
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 1s cubic-bezier(.2, .7, .2, 1);
-        }
-
-        .lang-bar.in div {
-            transform: scaleX(1);
-        }
-
-        .lang-legend {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 14px;
-            margin-bottom: 44px;
-        }
-
-        .lang-legend li {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-family: var(--mono);
-            font-size: 0.85rem;
-            color: var(--text-muted);
-        }
-
-        .lang-legend .swatch {
-            width: 10px;
-            height: 10px;
-            border-radius: 2px;
-            flex-shrink: 0;
-        }
-
         .skills-marquee {
             display: flex;
             flex-direction: column;
@@ -1403,22 +1360,55 @@
             }
         }
 
-        .marquee-track span {
+        .skill-badge {
             flex-shrink: 0;
-            font-family: var(--mono);
-            font-size: 0.8rem;
-            padding: 8px 14px;
+            width: 52px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             border: 1px solid var(--border);
-            border-radius: 20px;
-            color: var(--text-muted);
+            border-radius: 14px;
             background: var(--surface-solid);
-            transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+            cursor: none;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.4s ease;
         }
 
-        .marquee-track span:hover {
+        .skill-badge img {
+            width: 26px;
+            height: 26px;
+            object-fit: contain;
+        }
+
+        .skill-badge:hover,
+        .skill-badge:focus-visible,
+        .skill-badge.badge-active {
             border-color: var(--blue-bright);
-            color: var(--blue-bright);
-            box-shadow: 0 0 14px rgba(47, 143, 255, 0.2);
+            box-shadow: 0 0 16px rgba(47, 143, 255, 0.3);
+            transform: translateY(-3px);
+        }
+
+        #skillTooltip {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            background: #0a0f1c;
+            border: 1px solid var(--blue);
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-family: var(--mono);
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #eaf1ff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(47, 143, 255, 0.25);
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            transform: translate(-50%, -130%);
+            white-space: nowrap;
+        }
+
+        #skillTooltip.show {
+            opacity: 1;
         }
 
         /* ---------- CONTRIBUTIONS HEATMAP ---------- */
@@ -1998,6 +1988,7 @@
     <div id="cursorDot"></div>
     <div id="cursorRing"></div>
     <div id="contribTooltip"></div>
+    <div id="skillTooltip"></div>
     <div id="toast"></div>
 
     <canvas id="particles"></canvas>
@@ -2165,26 +2156,16 @@
                     <h2 data-i18n="skills.heading">Bahasa &amp; teknologi yang saya kuasai</h2>
                 </div>
                 <div class="reveal">
-                    <div class="lang-bar" id="langBar"></div>
-                    <ul class="lang-legend" id="langLegend"></ul>
                     <div class="skills-marquee">
                         <div class="marquee-row" data-dir="left">
                             <div class="marquee-fade marquee-fade-left"></div>
                             <div class="marquee-fade marquee-fade-right"></div>
-                            <div class="marquee-track">
-                                <span>Laravel</span><span>Node.js</span><span>React</span><span>Vue</span>
-                                <span>Docker</span><span>MySQL</span><span>PostgreSQL</span><span>Redis</span>
-                                <span>Git</span><span>REST API</span><span>Tailwind CSS</span><span>Linux</span>
-                            </div>
+                            <div class="marquee-track" id="marqueeTrackLeft"></div>
                         </div>
                         <div class="marquee-row" data-dir="right">
                             <div class="marquee-fade marquee-fade-left"></div>
                             <div class="marquee-fade marquee-fade-right"></div>
-                            <div class="marquee-track">
-                                <span>PHP</span><span>JavaScript</span><span>HTML</span><span>CSS</span>
-                                <span>Python</span><span>Go</span><span>Rust</span><span>Figma</span>
-                                <span>Postman</span><span>GitHub Actions</span><span>Nginx</span><span>VS Code</span>
-                            </div>
+                            <div class="marquee-track" id="marqueeTrackRight"></div>
                         </div>
                     </div>
                 </div>
@@ -2602,39 +2583,113 @@
             entries.forEach(e => {
                 if (e.isIntersecting) {
                     e.target.classList.add('in');
-                    const bar = e.target.querySelector && e.target.querySelector('#langBar');
-                    if (bar) bar.classList.add('in');
                     io.unobserve(e.target);
                 }
             });
         }, { threshold: 0.15 });
         revealEls.forEach(el => io.observe(el));
 
-        /* ---------- Skills marquee (seamless infinite loop) ---------- */
+        /* ---------- Skills marquee with logos + name tooltip ---------- */
+        const skillIcons = [
+            { name: 'Laravel', slug: 'laravel' },
+            { name: 'Node.js', slug: 'nodedotjs' },
+            { name: 'React', slug: 'react' },
+            { name: 'Vue', slug: 'vuedotjs' },
+            { name: 'Docker', slug: 'docker' },
+            { name: 'MySQL', slug: 'mysql' },
+            { name: 'PostgreSQL', slug: 'postgresql' },
+            { name: 'Redis', slug: 'redis' },
+            { name: 'Git', slug: 'git' },
+            { name: 'Tailwind CSS', slug: 'tailwindcss' },
+            { name: 'Linux', slug: 'linux' },
+            { name: 'PHP', slug: 'php' },
+            { name: 'JavaScript', slug: 'javascript' },
+            { name: 'HTML', slug: 'html5' },
+            { name: 'CSS', slug: 'css3' },
+            { name: 'Python', slug: 'python' },
+            { name: 'Go', slug: 'go' },
+            { name: 'Rust', slug: 'rust' },
+            { name: 'Figma', slug: 'figma' },
+            { name: 'Postman', slug: 'postman' },
+            { name: 'GitHub Actions', slug: 'githubactions' },
+            { name: 'Nginx', slug: 'nginx' },
+            { name: 'VS Code', slug: 'visualstudiocode' },
+        ];
+
+        const skillTooltip = document.getElementById('skillTooltip');
+        let skillTooltipHideTimer = null;
+
+        function showSkillTooltip(badge, x, y) {
+            skillTooltip.textContent = badge.dataset.name;
+            skillTooltip.style.left = x + 'px';
+            skillTooltip.style.top = y + 'px';
+            skillTooltip.classList.add('show');
+        }
+        function hideSkillTooltip() {
+            skillTooltip.classList.remove('show');
+        }
+
+        function makeSkillBadge(item) {
+            const badge = document.createElement('span');
+            badge.className = 'skill-badge';
+            badge.dataset.name = item.name;
+            badge.tabIndex = 0;
+
+            const img = document.createElement('img');
+            img.src = `https://cdn.simpleicons.org/${item.slug}/7ec8ff`;
+            img.alt = item.name;
+            img.loading = 'lazy';
+            img.onerror = function () {
+                this.onerror = null;
+                badge.innerHTML = '';
+                badge.style.fontFamily = 'var(--mono)';
+                badge.style.fontSize = '0.65rem';
+                badge.style.color = 'var(--blue-bright)';
+                badge.textContent = item.name.slice(0, 2).toUpperCase();
+            };
+            badge.appendChild(img);
+
+            badge.addEventListener('mouseenter', (e) => {
+                cursorRing.classList.add('hovering');
+                showSkillTooltip(badge, e.clientX, e.clientY);
+            });
+            badge.addEventListener('mousemove', (e) => {
+                showSkillTooltip(badge, e.clientX, e.clientY);
+            });
+            badge.addEventListener('mouseleave', () => {
+                cursorRing.classList.remove('hovering');
+                hideSkillTooltip();
+            });
+            badge.addEventListener('click', (e) => {
+                badge.classList.add('badge-active');
+                const rect = badge.getBoundingClientRect();
+                showSkillTooltip(badge, rect.left + rect.width / 2, rect.top);
+                clearTimeout(skillTooltipHideTimer);
+                skillTooltipHideTimer = setTimeout(() => {
+                    hideSkillTooltip();
+                    badge.classList.remove('badge-active');
+                }, 1600);
+            });
+            badge.addEventListener('focus', (e) => {
+                const rect = badge.getBoundingClientRect();
+                showSkillTooltip(badge, rect.left + rect.width / 2, rect.top);
+            });
+            badge.addEventListener('blur', hideSkillTooltip);
+
+            return badge;
+        }
+
+        const half = Math.ceil(skillIcons.length / 2);
+        const leftItems = skillIcons.slice(0, half);
+        const rightItems = skillIcons.slice(half);
+
+        const trackLeft = document.getElementById('marqueeTrackLeft');
+        const trackRight = document.getElementById('marqueeTrackRight');
+        leftItems.forEach(item => trackLeft.appendChild(makeSkillBadge(item)));
+        rightItems.forEach(item => trackRight.appendChild(makeSkillBadge(item)));
+
         document.querySelectorAll('.marquee-track').forEach(track => {
             track.innerHTML += track.innerHTML;
-            track.querySelectorAll('span').forEach(bindHoverCursor);
-        });
-
-        /* ---------- Language stats bar ---------- */
-        const languages = [
-            { name: 'PHP', pct: 32, color: '#2f8fff' },
-            { name: 'JavaScript', pct: 24, color: '#7ec8ff' },
-            { name: 'Python', pct: 18, color: '#7ee6c4' },
-            { name: 'Go', pct: 14, color: '#123a6e' },
-            { name: 'Rust', pct: 8, color: '#f2b84b' },
-            { name: 'Lainnya', pct: 4, color: '#4a5878' },
-        ];
-        const langBar = document.getElementById('langBar');
-        const langLegend = document.getElementById('langLegend');
-        languages.forEach(l => {
-            const seg = document.createElement('div');
-            seg.style.width = l.pct + '%';
-            seg.style.background = l.color;
-            langBar.appendChild(seg);
-            const li = document.createElement('li');
-            li.innerHTML = `<span class="swatch" style="background:${l.color}"></span>${l.name} · ${l.pct}%`;
-            langLegend.appendChild(li);
         });
 
         /* ---------- GitHub contribution heatmap (real data via public API) ---------- */
