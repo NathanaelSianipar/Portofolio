@@ -1243,9 +1243,9 @@
         }
 
         .edu-logo-wrap {
-            width: 60px;
-            height: 60px;
-            border-radius: 12px;
+            width: 92px;
+            height: 92px;
+            border-radius: 16px;
             overflow: hidden;
             flex-shrink: 0;
             background: #080d18;
@@ -1253,6 +1253,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 10px;
         }
 
         .edu-logo-wrap img {
@@ -1263,22 +1264,22 @@
 
         .edu-info h3 {
             font-family: var(--display);
-            font-size: 1.05rem;
+            font-size: 1.3rem;
             font-weight: 600;
-            margin-bottom: 4px;
+            margin-bottom: 6px;
         }
 
         .edu-degree {
             color: var(--blue-bright);
             font-family: var(--mono);
-            font-size: 0.85rem;
-            margin-bottom: 2px;
+            font-size: 1rem;
+            margin-bottom: 4px;
         }
 
         .edu-year {
             color: var(--text-muted);
             font-family: var(--mono);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
 
         @media (max-width:560px) {
@@ -1362,21 +1363,21 @@
 
         .skill-badge {
             flex-shrink: 0;
-            width: 52px;
-            height: 52px;
+            width: 84px;
+            height: 84px;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 20px;
             background: var(--surface-solid);
             cursor: none;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background-color 0.4s ease;
         }
 
         .skill-badge img {
-            width: 26px;
-            height: 26px;
+            width: 44px;
+            height: 44px;
             object-fit: contain;
         }
 
@@ -1384,8 +1385,8 @@
         .skill-badge:focus-visible,
         .skill-badge.badge-active {
             border-color: var(--blue-bright);
-            box-shadow: 0 0 16px rgba(47, 143, 255, 0.3);
-            transform: translateY(-3px);
+            box-shadow: 0 0 22px rgba(47, 143, 255, 0.35);
+            transform: translateY(-4px) scale(1.04);
         }
 
         #skillTooltip {
@@ -1394,10 +1395,10 @@
             z-index: 9998;
             background: #0a0f1c;
             border: 1px solid var(--blue);
-            border-radius: 6px;
-            padding: 6px 12px;
+            border-radius: 8px;
+            padding: 8px 16px;
             font-family: var(--mono);
-            font-size: 0.78rem;
+            font-size: 0.95rem;
             font-weight: 600;
             color: #eaf1ff;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), 0 0 12px rgba(47, 143, 255, 0.25);
@@ -1470,36 +1471,36 @@
         .contrib-grid-wrap {
             display: flex;
             gap: 8px;
-            min-width: 760px;
+            min-width: 980px;
         }
 
         .contrib-months {
             display: grid;
             grid-auto-flow: column;
             font-family: var(--mono);
-            font-size: 0.68rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
-            margin-bottom: 4px;
-            height: 14px;
+            margin-bottom: 6px;
+            height: 18px;
             position: relative;
         }
 
         .contrib-cols {
             display: grid;
             grid-auto-flow: column;
-            gap: 3px;
+            gap: 4px;
         }
 
         .contrib-col {
             display: grid;
-            grid-template-rows: repeat(7, 11px);
-            gap: 3px;
+            grid-template-rows: repeat(7, 15px);
+            gap: 4px;
         }
 
         .contrib-cell {
-            width: 11px;
-            height: 11px;
-            border-radius: 3px;
+            width: 15px;
+            height: 15px;
+            border-radius: 4px;
             background: #0f1626;
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -1528,10 +1529,10 @@
         .contrib-legend {
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-top: 16px;
+            gap: 7px;
+            margin-top: 18px;
             font-family: var(--mono);
-            font-size: 0.72rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
         }
 
@@ -1658,9 +1659,10 @@
 
         .tag-row span {
             font-family: var(--mono);
-            font-size: 0.72rem;
-            padding: 4px 10px;
-            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            padding: 7px 14px;
+            border-radius: 8px;
             background: #101a2c;
             color: var(--blue-bright);
         }
@@ -1884,9 +1886,9 @@
         }
 
         .footer-social-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 13px;
             border: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -1896,8 +1898,8 @@
         }
 
         .footer-social-btn svg {
-            width: 17px;
-            height: 17px;
+            width: 23px;
+            height: 23px;
         }
 
         .footer-social-btn:hover {
@@ -2643,7 +2645,7 @@
                 this.onerror = null;
                 badge.innerHTML = '';
                 badge.style.fontFamily = 'var(--mono)';
-                badge.style.fontSize = '0.65rem';
+                badge.style.fontSize = '1.1rem';
                 badge.style.color = 'var(--blue-bright)';
                 badge.textContent = item.name.slice(0, 2).toUpperCase();
             };
