@@ -1006,11 +1006,17 @@
         .eyebrow {
             font-family: var(--mono);
             color: var(--blue-bright);
-            font-size: 0.85rem;
-            margin-bottom: 16px;
-            display: flex;
+            font-size: 0.78rem;
+            font-weight: 500;
+            letter-spacing: 0.02em;
+            margin-bottom: 20px;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
+            padding: 7px 14px 7px 12px;
+            border: 1px solid rgba(47, 143, 255, 0.35);
+            border-radius: 999px;
+            background: rgba(47, 143, 255, 0.08);
         }
 
         .eyebrow::before {
@@ -1031,9 +1037,11 @@
 
         .hero h1 {
             font-family: var(--display);
-            font-size: clamp(2.1rem, 5.4vw, 4.3rem);
+            /* Tuned so headline size stays elegant from phone through
+               ultra-wide monitors instead of ballooning on laptop screens. */
+            font-size: clamp(1.9rem, 1.15vw + 1.55rem, 2.85rem);
             font-weight: 700;
-            line-height: 1.08;
+            line-height: 1.12;
             letter-spacing: -0.015em;
             overflow-wrap: break-word;
         }
@@ -1222,6 +1230,55 @@
         .magnetic {
             transition: transform 0.15s ease-out, box-shadow 0.2s ease;
             will-change: transform;
+        }
+
+        /* ---------- HERO ENTRANCE SEQUENCE ---------- */
+        @keyframes heroRise {
+            from {
+                opacity: 0;
+                transform: translateY(26px);
+                filter: blur(6px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        .hero .eyebrow,
+        .hero h1,
+        .hero p.lead,
+        .hero .hero-meta,
+        .hero .hero-cta,
+        .hero .editor-shell {
+            opacity: 0;
+            animation: heroRise 0.85s cubic-bezier(.16, .84, .3, 1) forwards;
+        }
+
+        .hero .eyebrow {
+            animation-delay: .15s;
+        }
+
+        .hero h1 {
+            animation-delay: .28s;
+        }
+
+        .hero p.lead {
+            animation-delay: .48s;
+        }
+
+        .hero .hero-meta {
+            animation-delay: .64s;
+        }
+
+        .hero .hero-cta {
+            animation-delay: .8s;
+        }
+
+        .hero .editor-shell {
+            animation-delay: .5s;
         }
 
         /* ---------- EDITOR WINDOW ---------- */
@@ -1467,14 +1524,56 @@
 
         .reveal {
             opacity: 0;
-            transform: translateY(28px) scale(0.98);
-            transition: opacity 0.7s cubic-bezier(.2, .7, .2, 1), transform 0.7s cubic-bezier(.2, .7, .2, 1);
+            transform: translateY(30px) scale(0.98);
+            filter: blur(8px);
+            transition: opacity 0.8s cubic-bezier(.16, .84, .3, 1), transform 0.8s cubic-bezier(.16, .84, .3, 1), filter 0.8s ease;
         }
 
         .reveal.in {
             opacity: 1;
             transform: translateY(0) scale(1);
+            filter: blur(0);
         }
+
+        /* Cascading stagger for grid/timeline children once their parent .reveal
+           enters view. Uses independent keyframe animations (not the transition
+           shorthand) so it never interferes with each card's own hover/tilt
+           transitions. */
+        @keyframes cardRise {
+            from {
+                opacity: 0;
+                transform: translateY(22px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .project-grid .project-card,
+        .education-grid .education-card,
+        .timeline .timeline-item {
+            opacity: 0;
+        }
+
+        .reveal.in .project-card,
+        .reveal.in .education-card,
+        .reveal.in .timeline-item {
+            animation: cardRise 0.6s cubic-bezier(.16, .84, .3, 1) forwards;
+        }
+
+        .project-grid .project-card:nth-child(1) { animation-delay: .05s; }
+        .project-grid .project-card:nth-child(2) { animation-delay: .13s; }
+        .project-grid .project-card:nth-child(3) { animation-delay: .21s; }
+        .project-grid .project-card:nth-child(4) { animation-delay: .29s; }
+
+        .education-grid .education-card:nth-child(1) { animation-delay: .05s; }
+        .education-grid .education-card:nth-child(2) { animation-delay: .15s; }
+
+        .timeline .timeline-item:nth-child(1) { animation-delay: .05s; }
+        .timeline .timeline-item:nth-child(2) { animation-delay: .16s; }
+        .timeline .timeline-item:nth-child(3) { animation-delay: .27s; }
 
         /* ---------- PROFILE / ABOUT ---------- */
         .about-grid {
@@ -2359,7 +2458,7 @@
 
         @media (max-width:420px) {
             .container {
-                padding: 0 16px;
+                padding: 0 20px;
             }
 
             .hero-cta .btn {
