@@ -223,11 +223,11 @@
             position: fixed;
             left: 0;
             right: 0;
-            height: 140px;
+            height: 180px;
             z-index: 3;
             pointer-events: none;
-            background: linear-gradient(to bottom, transparent, rgba(47, 143, 255, 0.06), transparent);
-            animation: sweep 7s linear infinite;
+            background: linear-gradient(to bottom, transparent, rgba(47, 143, 255, 0.035), transparent);
+            animation: sweep 14s ease-in-out infinite;
             transition: opacity 0.4s ease;
         }
 
@@ -404,8 +404,8 @@
 
         .boot-visual {
             position: relative;
-            width: 128px;
-            height: 128px;
+            width: 140px;
+            height: 140px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -415,18 +415,18 @@
         .boot-visual::after {
             content: '';
             position: absolute;
-            inset: -30%;
+            inset: -34%;
             border-radius: 50%;
-            background: radial-gradient(circle, rgba(47, 143, 255, 0.28), transparent 68%);
-            filter: blur(14px);
+            background: radial-gradient(circle, rgba(47, 143, 255, 0.32), transparent 68%);
+            filter: blur(18px);
             z-index: -1;
-            animation: bootPulse 1.8s ease-in-out infinite;
+            animation: bootPulse 2.2s ease-in-out infinite;
         }
 
         @media (max-width:360px) {
             .boot-visual {
-                width: 92px;
-                height: 92px;
+                width: 100px;
+                height: 100px;
                 margin-bottom: 20px;
             }
 
@@ -435,20 +435,55 @@
             }
         }
 
+        .boot-core {
+            position: absolute;
+            inset: 30px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, rgba(126, 200, 255, 0.35), rgba(18, 58, 110, 0.15) 60%, transparent 75%);
+            box-shadow: inset 0 0 18px rgba(47, 143, 255, 0.35);
+        }
+
         .boot-ring {
             position: absolute;
             inset: 0;
             border-radius: 50%;
-            border: 1px solid rgba(47, 143, 255, 0.35);
+            border: 1px solid rgba(47, 143, 255, 0.28);
             border-top-color: var(--blue-bright);
-            animation: bootSpin 2.2s linear infinite;
+            border-right-color: var(--blue-bright);
+            animation: bootSpin 2.4s cubic-bezier(.45, .05, .55, .95) infinite;
         }
 
         .boot-ring-2 {
-            inset: 16px;
-            border-color: rgba(126, 230, 196, 0.25);
+            inset: 15px;
+            border-color: rgba(126, 230, 196, 0.22);
             border-bottom-color: var(--mint);
-            animation: bootSpin 1.5s linear infinite reverse;
+            border-left-color: var(--mint);
+            animation: bootSpin 1.7s cubic-bezier(.45, .05, .55, .95) infinite reverse;
+        }
+
+        .boot-ring-3 {
+            inset: -10px;
+            border-color: transparent;
+            border-top-color: rgba(47, 143, 255, 0.45);
+            animation: bootSpin 3.6s linear infinite;
+        }
+
+        .boot-orbit {
+            position: absolute;
+            inset: 0;
+            animation: bootSpin 2.4s cubic-bezier(.45, .05, .55, .95) infinite;
+        }
+
+        .boot-orbit-dot {
+            position: absolute;
+            top: -3px;
+            left: 50%;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--blue-bright);
+            box-shadow: 0 0 10px var(--blue-bright), 0 0 20px var(--blue);
+            transform: translateX(-50%);
         }
 
         @keyframes bootSpin {
@@ -460,23 +495,23 @@
         .boot-logo {
             font-family: var(--display);
             font-weight: 700;
-            font-size: 1.7rem;
+            font-size: 1.85rem;
             color: var(--blue-bright);
-            text-shadow: 0 0 22px rgba(126, 200, 255, 0.65);
-            animation: bootPulse 1.8s ease-in-out infinite;
+            text-shadow: 0 0 26px rgba(126, 200, 255, 0.7);
+            animation: bootPulse 2.2s ease-in-out infinite;
         }
 
         @keyframes bootPulse {
 
             0%,
             100% {
-                opacity: 0.8;
+                opacity: 0.85;
                 transform: scale(1);
             }
 
             50% {
                 opacity: 1;
-                transform: scale(1.08);
+                transform: scale(1.06);
             }
         }
 
@@ -492,6 +527,7 @@
         }
 
         .boot-status {
+            position: relative;
             color: var(--text-muted);
             font-size: clamp(0.68rem, 3.2vw, 0.82rem);
             min-height: 1.4em;
@@ -506,15 +542,25 @@
             color: var(--blue-bright);
         }
 
+        .boot-status-text {
+            display: inline-block;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+        }
+
+        .boot-status-text.fading {
+            opacity: 0;
+            transform: translateY(3px);
+        }
+
         .boot-status .ok {
             color: var(--mint);
         }
 
         .boot-bar {
             width: 100%;
-            height: 3px;
+            height: 4px;
             background: #101a2c;
-            border-radius: 2px;
+            border-radius: 3px;
             overflow: hidden;
             position: relative;
         }
@@ -523,8 +569,29 @@
             height: 100%;
             width: 0%;
             background: linear-gradient(90deg, var(--blue), var(--blue-bright), var(--mint));
-            box-shadow: 0 0 14px var(--blue-bright);
-            transition: width 0.25s ease;
+            box-shadow: 0 0 16px var(--blue-bright);
+            transition: width 0.3s cubic-bezier(.25, .6, .35, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boot-bar-fill::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(110deg, transparent 20%, rgba(255, 255, 255, 0.55) 45%, transparent 70%);
+            background-size: 200% 100%;
+            animation: bootShimmer 1.4s linear infinite;
+        }
+
+        @keyframes bootShimmer {
+            0% {
+                background-position: 160% 0;
+            }
+
+            100% {
+                background-position: -60% 0;
+            }
         }
 
         .boot-pct {
@@ -533,6 +600,7 @@
             color: var(--blue-bright);
             letter-spacing: 0.06em;
             text-shadow: 0 0 8px rgba(126, 200, 255, 0.5);
+            font-variant-numeric: tabular-nums;
         }
 
         @keyframes fadeIn {
@@ -983,12 +1051,12 @@
             }
 
             50% {
-                opacity: 0.55;
+                opacity: 0.88;
             }
         }
 
         .scanlines.flicker {
-            animation: crtFlicker 0.15s steps(2);
+            animation: crtFlicker 0.4s ease-in-out;
         }
 
         /* ---------- HERO ---------- */
@@ -1601,6 +1669,7 @@
             overflow-x: auto;
             scrollbar-width: none;
             min-width: 0;
+            position: relative;
         }
 
         .tabs::-webkit-scrollbar {
@@ -1619,16 +1688,28 @@
             border-top: 2px solid transparent;
             transition: color 0.2s ease;
             flex-shrink: 0;
+            position: relative;
         }
 
         .tab.active {
             color: #eaf1ff;
             background: var(--editor-bg);
-            border-top: 2px solid var(--blue-bright);
         }
 
         .tab:hover {
             color: #eaf1ff;
+        }
+
+        .tab-indicator {
+            position: absolute;
+            bottom: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--blue), var(--blue-bright));
+            box-shadow: 0 0 10px var(--blue-bright), 0 0 3px var(--blue-bright);
+            border-radius: 2px 2px 0 0;
+            transition: transform 0.38s cubic-bezier(.22, .9, .3, 1), width 0.38s cubic-bezier(.22, .9, .3, 1), opacity 0.25s ease;
+            pointer-events: none;
+            will-change: transform, width;
         }
 
         .editor-body {
@@ -1640,6 +1721,40 @@
             z-index: 1;
             max-width: 100%;
             min-width: 0;
+            overflow: hidden;
+        }
+
+        .editor-scan {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, rgba(47, 143, 255, 0.10), transparent);
+            transform: translateY(-100%);
+            opacity: 0;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        .editor-scan.run {
+            animation: editorScanSweep 0.55s cubic-bezier(.3, .1, .3, 1);
+        }
+
+        @keyframes editorScanSweep {
+            0% {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(100%);
+                opacity: 0;
+            }
         }
 
         .line-numbers {
@@ -1663,6 +1778,14 @@
             max-width: 100%;
             overflow-x: auto;
             color: #eaf1ff;
+            transition: opacity 0.22s ease, transform 0.22s ease, filter 0.22s ease;
+            will-change: opacity, transform;
+        }
+
+        .code-pane.switching {
+            opacity: 0;
+            transform: translateY(6px) scale(0.994);
+            filter: blur(2px);
         }
 
         .code-pane .kw {
@@ -1688,12 +1811,19 @@
             background: var(--blue-bright);
             box-shadow: 0 0 8px var(--blue-bright);
             vertical-align: text-bottom;
-            animation: blink 1s step-end infinite;
+            animation: blink 1.1s ease-in-out infinite;
         }
 
         @keyframes blink {
-            50% {
-                opacity: 0;
+
+            0%,
+            45% {
+                opacity: 1;
+            }
+
+            55%,
+            100% {
+                opacity: 0.15;
             }
         }
 
@@ -2985,12 +3115,15 @@
     <div id="boot">
         <div class="boot-box">
             <div class="boot-visual">
+                <div class="boot-ring boot-ring-3"></div>
                 <div class="boot-ring"></div>
                 <div class="boot-ring boot-ring-2"></div>
+                <div class="boot-orbit"><span class="boot-orbit-dot"></span></div>
+                <div class="boot-core"></div>
                 <div class="boot-logo">&lt;/&gt;</div>
             </div>
             <p class="boot-name">Nathanael Septian Sianipar</p>
-            <p class="boot-status" id="bootStatus">menyiapkan antarmuka...</p>
+            <p class="boot-status"><span class="boot-status-text" id="bootStatus">menyiapkan antarmuka...</span></p>
             <div class="boot-bar">
                 <div class="boot-bar-fill" id="bootFill"></div>
             </div>
@@ -3104,6 +3237,7 @@
                         <div class="editor-body">
                             <div class="line-numbers" id="lineNumbers"></div>
                             <pre class="code-pane" id="codePane"></pre>
+                            <div class="editor-scan" id="editorScan"></div>
                         </div>
                     </div>
                 </div>
@@ -3451,11 +3585,20 @@
             ];
             let bootPct = 0;
             let bootMsgIndex = 0;
+
+            function setBootStatus(html) {
+                bootStatusEl.classList.add('fading');
+                setTimeout(() => {
+                    bootStatusEl.innerHTML = html;
+                    bootStatusEl.classList.remove('fading');
+                }, 220);
+            }
+
             bootStatusEl.innerHTML = bootMessages[0];
             const bootMsgInterval = setInterval(() => {
                 bootMsgIndex = (bootMsgIndex + 1) % bootMessages.length;
-                bootStatusEl.innerHTML = bootMessages[bootMsgIndex];
-            }, 650);
+                setBootStatus(bootMessages[bootMsgIndex]);
+            }, 700);
             const bootInterval = setInterval(() => {
                 bootPct += Math.random() * 16 + 7;
                 if (bootPct >= 100) { bootPct = 100; clearInterval(bootInterval); }
@@ -3463,8 +3606,8 @@
                 bootPctEl.textContent = Math.round(bootPct) + '%';
                 if (bootPct >= 100) {
                     clearInterval(bootMsgInterval);
-                    bootStatusEl.innerHTML = 'selesai <span class="ok">[ok]</span>';
-                    setTimeout(() => bootEl.classList.add('hidden'), 400);
+                    setBootStatus('selesai <span class="ok">[ok]</span>');
+                    setTimeout(() => bootEl.classList.add('hidden'), 450);
                 }
             }, 180);
             setTimeout(() => bootEl.classList.add('hidden'), 3500);
@@ -3598,19 +3741,35 @@
             const tabsEl = document.getElementById('tabs');
             const codePane = document.getElementById('codePane');
             const lineNumbers = document.getElementById('lineNumbers');
+            const editorScan = document.getElementById('editorScan');
 
+            const indicator = document.createElement('div');
+            indicator.className = 'tab-indicator';
+            tabsEl.appendChild(indicator);
+
+            const tabEls = [];
             snippets.forEach((s, i) => {
                 const tab = document.createElement('div');
                 tab.className = 'tab' + (i === 0 ? ' active' : '');
                 tab.textContent = s.file;
                 tab.addEventListener('click', () => {
+                    if (i === currentIndex) return;
                     clearInterval(autoplayTimer);
-                    renderSnippet(i, true);
+                    switchToSnippet(i, true);
                     startAutoplay(6000);
                 });
-                tabsEl.appendChild(tab);
+                tabsEl.insertBefore(tab, indicator);
+                tabEls.push(tab);
                 bindHoverCursor(tab);
             });
+
+            function moveIndicatorTo(tabEl) {
+                if (!tabEl) return;
+                const tabsRect = tabsEl.getBoundingClientRect();
+                const r = tabEl.getBoundingClientRect();
+                indicator.style.width = r.width + 'px';
+                indicator.style.transform = `translateX(${r.left - tabsRect.left + tabsEl.scrollLeft}px)`;
+            }
 
             function escapeHtml(str) { return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
             function buildLineHTML(tokens) {
@@ -3620,16 +3779,45 @@
                 }).join('');
             }
 
-            let typingTimer = null, autoplayTimer = null, currentIndex = 0;
+            let typingTimer = null, autoplayTimer = null, currentIndex = 0, fadeTimer = null;
 
-            function renderSnippet(index, skipAnim) {
-                currentIndex = index;
-                [...tabsEl.children].forEach((t, i) => t.classList.toggle('active', i === index));
-                clearTimeout(typingTimer);
-                const snippet = snippets[index];
+            // First paint: no transition needed, just lay out the initial snippet
+            // and position the indicator once layout has settled.
+            function renderInitial() {
+                const snippet = snippets[0];
                 lineNumbers.innerHTML = snippet.lines.map((_, i) => `<div>${i + 1}</div>`).join('');
-                if (skipAnim) { codePane.innerHTML = snippet.lines.map(buildLineHTML).join('\n'); return; }
-                typeLines(snippet.lines);
+                requestAnimationFrame(() => moveIndicatorTo(tabEls[0]));
+            }
+
+            // Smooth handoff between snippets: fade + gently lift the current
+            // code out, swap content while invisible, then fade the new
+            // content back in — instead of an abrupt instant clear/redraw.
+            function switchToSnippet(index, manual) {
+                currentIndex = index;
+                tabEls.forEach((t, i) => t.classList.toggle('active', i === index));
+                moveIndicatorTo(tabEls[index]);
+                clearTimeout(typingTimer);
+                clearTimeout(fadeTimer);
+
+                codePane.classList.add('switching');
+                if (editorScan) {
+                    editorScan.classList.remove('run');
+                    void editorScan.offsetWidth; // restart animation
+                    editorScan.classList.add('run');
+                }
+
+                fadeTimer = setTimeout(() => {
+                    const snippet = snippets[index];
+                    lineNumbers.innerHTML = snippet.lines.map((_, i) => `<div>${i + 1}</div>`).join('');
+                    if (reduceMotion) {
+                        codePane.innerHTML = snippet.lines.map(buildLineHTML).join('\n');
+                        codePane.classList.remove('switching');
+                    } else {
+                        codePane.innerHTML = '';
+                        codePane.classList.remove('switching');
+                        typeLines(snippet.lines);
+                    }
+                }, manual ? 190 : 220);
             }
 
             function typeLines(lines) {
@@ -3652,9 +3840,9 @@
                     if (ci >= fullText.length) {
                         rendered.push(buildLineHTML(flat));
                         li++; ci = 0;
-                        typingTimer = setTimeout(step, 180);
+                        typingTimer = setTimeout(step, 170);
                     } else {
-                        typingTimer = setTimeout(step, 14);
+                        typingTimer = setTimeout(step, 13);
                     }
                 }
                 step();
@@ -3663,12 +3851,21 @@
             function startAutoplay(delay) {
                 autoplayTimer = setTimeout(() => {
                     const next = (currentIndex + 1) % snippets.length;
-                    renderSnippet(next);
-                    startAutoplay(6000);
+                    switchToSnippet(next, false);
+                    startAutoplay(6500);
                 }, delay);
             }
 
-            if (reduceMotion) { renderSnippet(0, true); } else { renderSnippet(0); startAutoplay(6000); }
+            window.addEventListener('resize', () => moveIndicatorTo(tabEls[currentIndex]));
+
+            if (reduceMotion) {
+                renderInitial();
+                codePane.innerHTML = snippets[0].lines.map(buildLineHTML).join('\n');
+            } else {
+                renderInitial();
+                typeLines(snippets[0].lines);
+                startAutoplay(6500);
+            }
         });
 
         /* ---------- Scroll reveal ---------- */
@@ -4273,8 +4470,8 @@
             if (scanlinesEl && !reduceMotion) {
                 setInterval(() => {
                     scanlinesEl.classList.add('flicker');
-                    setTimeout(() => scanlinesEl.classList.remove('flicker'), 140);
-                }, 11000 + Math.random() * 8000);
+                    setTimeout(() => scanlinesEl.classList.remove('flicker'), 420);
+                }, 18000 + Math.random() * 12000);
             }
         });
 
