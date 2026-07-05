@@ -364,6 +364,29 @@
             margin-bottom: 34px;
         }
 
+        .boot-visual::after {
+            content: '';
+            position: absolute;
+            inset: -30%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(47, 143, 255, 0.28), transparent 68%);
+            filter: blur(14px);
+            z-index: -1;
+            animation: bootPulse 1.8s ease-in-out infinite;
+        }
+
+        @media (max-width:360px) {
+            .boot-visual {
+                width: 92px;
+                height: 92px;
+                margin-bottom: 20px;
+            }
+
+            .boot-logo {
+                font-size: 1.25rem;
+            }
+        }
+
         .boot-ring {
             position: absolute;
             inset: 0;
@@ -412,18 +435,25 @@
         .boot-name {
             font-family: var(--display);
             font-weight: 600;
-            font-size: 1.05rem;
+            font-size: clamp(0.92rem, 4.4vw, 1.05rem);
             color: var(--text);
             letter-spacing: 0.01em;
             margin-bottom: 6px;
+            text-align: center;
         }
 
         .boot-status {
             color: var(--text-muted);
-            font-size: 0.82rem;
+            font-size: clamp(0.72rem, 3.4vw, 0.82rem);
             min-height: 1.4em;
             margin-bottom: 22px;
             text-align: center;
+            padding: 0 8px;
+        }
+
+        .boot-status::before {
+            content: '> ';
+            color: var(--blue-bright);
         }
 
         .boot-status .ok {
@@ -519,7 +549,7 @@
             color: var(--text);
         }
 
-        nav a::after {
+        header nav a::after {
             content: '';
             position: absolute;
             left: 11px;
@@ -533,13 +563,13 @@
             transition: transform 0.25s ease;
         }
 
-        nav a:hover::after,
-        nav a:focus-visible::after,
-        nav a.active::after {
+        header nav a:hover::after,
+        header nav a:focus-visible::after,
+        header nav a.active::after {
             transform: scaleX(1);
         }
 
-        nav a.active {
+        header nav a.active {
             color: var(--blue-bright);
         }
 
@@ -799,21 +829,21 @@
 
         /* ---------- HERO ---------- */
         .hero {
-            padding: 64px 0 56px;
+            padding: 48px 0 40px;
             display: grid;
-            gap: 40px;
+            gap: 32px;
         }
 
         .container.hero {
             display: grid;
-            gap: 44px;
+            gap: 36px;
             align-items: center;
         }
 
         @media (min-width:880px) {
             .container.hero {
                 grid-template-columns: 1.05fr 0.95fr;
-                gap: 56px;
+                gap: 48px;
             }
         }
 
@@ -951,38 +981,47 @@
             margin-top: 18px;
         }
 
-        .hero-stats {
+        .hero-meta {
             display: flex;
-            gap: 10px;
+            align-items: center;
             flex-wrap: wrap;
-            margin-top: 26px;
+            gap: 10px;
+            margin-top: 22px;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
         }
 
-        .hero-stat {
-            display: flex;
-            align-items: baseline;
-            gap: 6px;
-            font-family: var(--mono);
-            font-size: 0.78rem;
-            padding: 9px 14px;
-            border-radius: 999px;
-            border: 1px solid var(--border);
-            background: rgba(47, 143, 255, 0.05);
-            color: var(--text-muted);
+        .hero-meta span.item {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
             white-space: nowrap;
         }
 
-        .hero-stat strong {
+        .hero-meta span.item strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .hero-meta .sep {
             color: var(--blue-bright);
-            font-size: 0.92rem;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(126, 200, 255, 0.35);
+            opacity: 0.55;
+        }
+
+        .hero-meta .dot-live {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--mint);
+            box-shadow: 0 0 0 3px rgba(126, 230, 196, 0.18), 0 0 8px var(--mint);
+            flex-shrink: 0;
         }
 
         .hero-cta {
             display: flex;
             gap: 14px;
-            margin-top: 28px;
+            margin-top: 26px;
             flex-wrap: wrap;
         }
 
@@ -1000,15 +1039,16 @@
         }
 
         .btn-primary {
-            background: var(--blue);
+            background: linear-gradient(135deg, var(--blue-bright), var(--blue) 65%);
             color: #02040a;
             font-weight: 600;
             border: none;
-            box-shadow: 0 0 0 rgba(47, 143, 255, 0);
+            box-shadow: 0 6px 22px -6px rgba(47, 143, 255, 0.55);
+            transition: box-shadow 0.25s ease, transform 0.15s ease;
         }
 
         .btn-primary:hover {
-            box-shadow: 0 8px 34px rgba(47, 143, 255, 0.45);
+            box-shadow: 0 10px 38px -6px rgba(47, 143, 255, 0.6);
         }
 
         .btn-ghost {
@@ -1224,7 +1264,7 @@
 
         /* ---------- SECTION GENERIC ---------- */
         section {
-            padding: 76px 0;
+            padding: 60px 0;
             border-top: 1px solid var(--border);
             transition: border-color 0.4s ease;
         }
@@ -1234,7 +1274,7 @@
         }
 
         .section-head {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
         }
 
         .section-tag {
@@ -1266,7 +1306,7 @@
         .about-grid {
             display: grid;
             grid-template-columns: 0.8fr 1.2fr;
-            gap: 52px;
+            gap: 40px;
             align-items: center;
         }
 
@@ -1560,13 +1600,31 @@
 
         /* ---------- CONTRIBUTIONS HEATMAP ---------- */
         .contrib-wrap {
+            --cell: 15px;
+            --cell-gap: 4px;
             background: var(--surface-solid);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 26px;
+            padding: 22px 24px;
             overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
             transition: background-color 0.4s ease, border-color 0.4s ease;
             position: relative;
+        }
+
+        @media (max-width:760px) {
+            .contrib-wrap {
+                --cell: 11px;
+                --cell-gap: 3px;
+            }
+        }
+
+        @media (max-width:420px) {
+            .contrib-wrap {
+                --cell: 9px;
+                --cell-gap: 2.5px;
+            }
         }
 
         .contrib-swipe-hint {
@@ -1578,6 +1636,10 @@
             margin-bottom: 14px;
             align-items: center;
             gap: 6px;
+        }
+
+        .contrib-swipe-hint.visible {
+            display: flex;
         }
 
         .contrib-top {
@@ -1629,36 +1691,36 @@
         .contrib-grid-wrap {
             display: flex;
             gap: 8px;
-            min-width: 980px;
+            min-width: min-content;
         }
 
         .contrib-months {
             display: grid;
             grid-auto-flow: column;
             font-family: var(--mono);
-            font-size: 0.8rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
             margin-bottom: 6px;
-            height: 18px;
+            height: 16px;
             position: relative;
         }
 
         .contrib-cols {
             display: grid;
             grid-auto-flow: column;
-            gap: 4px;
+            gap: var(--cell-gap);
         }
 
         .contrib-col {
             display: grid;
-            grid-template-rows: repeat(7, 15px);
-            gap: 4px;
+            grid-template-rows: repeat(7, var(--cell));
+            gap: var(--cell-gap);
         }
 
         .contrib-cell {
-            width: 15px;
-            height: 15px;
-            border-radius: 4px;
+            width: var(--cell);
+            height: var(--cell);
+            border-radius: 3px;
             background: #0f1626;
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -1695,6 +1757,8 @@
         }
 
         .contrib-legend .contrib-cell {
+            width: 12px;
+            height: 12px;
             opacity: 1;
             transform: scale(1);
         }
@@ -1725,7 +1789,7 @@
         .project-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 24px;
+            gap: 20px;
         }
 
         .project-card {
@@ -1941,8 +2005,8 @@
         .footer-top {
             display: grid;
             grid-template-columns: 1.3fr 0.8fr 1fr;
-            gap: 48px;
-            padding-bottom: 40px;
+            gap: 36px;
+            padding-bottom: 32px;
         }
 
         @media (max-width:760px) {
@@ -2091,7 +2155,7 @@
 
         @media (max-width:600px) {
             section {
-                padding: 56px 0;
+                padding: 42px 0;
             }
 
             .editor-body {
@@ -2160,7 +2224,7 @@
 
             /* Hero breathes better on phones */
             .hero {
-                padding: 40px 0 44px;
+                padding: 32px 0 34px;
             }
 
             .eyebrow {
@@ -2172,18 +2236,14 @@
                 margin-top: 14px;
             }
 
-            .hero-stats {
-                margin-top: 20px;
-                gap: 8px;
-            }
-
-            .hero-stat {
-                padding: 7px 12px;
-                font-size: 0.72rem;
+            .hero-meta {
+                margin-top: 16px;
+                gap: 7px;
+                font-size: 0.74rem;
             }
 
             .hero-cta {
-                margin-top: 22px;
+                margin-top: 20px;
                 gap: 10px;
             }
 
@@ -2242,10 +2302,6 @@
             /* Contribution heatmap: show the swipe hint, keep the grid legible */
             .contrib-wrap {
                 padding: 18px 18px 20px;
-            }
-
-            .contrib-swipe-hint.visible {
-                display: flex;
             }
 
             .contrib-grid-wrap {
@@ -2338,9 +2394,9 @@
                 font-size: 0.92rem;
             }
 
-            .hero-stat {
-                flex: 1 1 auto;
+            .hero-meta {
                 justify-content: center;
+                text-align: center;
             }
 
             .about-facts {
@@ -2443,10 +2499,13 @@
                             data-i18n="hero.title_post">Full-Stack Developer.</span></h1>
                     <p class="lead" data-i18n="hero.lead">Saya seorang mahasiswa yang ingin menjadi Fullstack Developer.
                     </p>
-                    <div class="hero-stats">
-                        <span class="hero-stat"><strong>1+</strong> tahun ngoding</span>
-                        <span class="hero-stat"><strong>4+</strong> proyek dibangun</span>
-                        <span class="hero-stat"><strong>6</strong> bahasa favorit</span>
+                    <div class="hero-meta">
+                        <span class="dot-live"></span>
+                        <span class="item" data-i18n="hero.meta_role"><strong>Fullstack Developer</strong></span>
+                        <span class="sep">/</span>
+                        <span class="item" data-i18n="hero.meta_school">Institut Teknologi Del</span>
+                        <span class="sep">/</span>
+                        <span class="item" data-i18n="hero.meta_location">Jambi, Indonesia</span>
                     </div>
                     <div class="hero-cta">
                         <a href="#proyek" class="btn btn-primary magnetic" data-i18n="hero.cta_primary">Lihat proyek
@@ -3205,8 +3264,21 @@
             contribLoadingEl.style.display = 'none';
             contribGridWrapEl.style.display = '';
             contribLegendEl.style.display = '';
+
+            const contribWrapEl = document.querySelector('.contrib-wrap');
             const swipeHintEl = document.getElementById('contribSwipeHint');
-            if (swipeHintEl) swipeHintEl.classList.add('visible');
+            function syncSwipeHint() {
+                if (!swipeHintEl || !contribWrapEl) return;
+                const overflowing = contribWrapEl.scrollWidth > contribWrapEl.clientWidth + 4;
+                swipeHintEl.classList.toggle('visible', overflowing);
+            }
+            requestAnimationFrame(() => {
+                syncSwipeHint();
+                if (contribWrapEl && contribWrapEl.scrollWidth > contribWrapEl.clientWidth) {
+                    contribWrapEl.scrollLeft = contribWrapEl.scrollWidth;
+                }
+            });
+            window.addEventListener('resize', syncSwipeHint);
 
             const contribObserver = new IntersectionObserver((entries) => {
                 entries.forEach(e => {
@@ -3341,7 +3413,7 @@
         const translations = {
             id: {
                 nav: { home: "Beranda", about: "Tentang", education: "Pendidikan", skills: "Keahlian", activity: "Kontribusi", projects: "Proyek", career: "Pengalaman", contact: "Kontak", themeToLight: "Ganti ke mode terang", themeToDark: "Ganti ke mode gelap" },
-                hero: { eyebrow: "tersedia untuk bekerja", title_pre: "Halo, saya", title_post: "Full-Stack Developer.", lead: "Saya seorang mahasiswa yang ingin menjadi Fullstack Developer.", cta_primary: "Lihat proyek saya →", cta_ghost: "Hubungi saya" },
+                hero: { eyebrow: "tersedia untuk bekerja", title_pre: "Halo, saya", title_post: "Full-Stack Developer.", lead: "Saya seorang mahasiswa yang ingin menjadi Fullstack Developer.", cta_primary: "Lihat proyek saya →", cta_ghost: "Hubungi saya", meta_role: "Fullstack Developer", meta_school: "Institut Teknologi Del", meta_location: "Jambi, Indonesia" },
                 about: { tag: "01 · tentang", heading: "Sedikit cerita tentang saya", comment_lead: "Profil Saya:", comment_body: "Saya lahir di Jambi pada 22 September 2007. Saya merupakan mahasiswa dari Institut Teknologi Del dengan jurusan yang saya ambil adalah D3 Teknologi Informasi. Saya memiliki keahlian sebagai Fullstack Developer.", fact_location: "Lokasi", fact_focus: "Fokus", fact_focus_val: "Web & Aplikasi", fact_exp: "Pengalaman", fact_exp_val: "1+ tahun", fact_lang: "Bahasa favorit", fact_learning: "Sedang belajar", fact_learning_val: "Flutter" },
                 education: { tag: "02 · pendidikan", heading: "Latar belakang pendidikan", items: [{ school: "Institut Teknologi Del", degree: "D3 Teknologi Informasi" }, { school: "SMA Negeri 2 Kota Jambi", degree: "Saintek" }] },
                 skills: { tag: "03 · keahlian", heading: "Bahasa &amp; teknologi yang saya kuasai" },
@@ -3366,7 +3438,7 @@
             },
             en: {
                 nav: { home: "Home", about: "About", education: "Education", skills: "Skills", activity: "Contributions", projects: "Projects", career: "Experience", contact: "Contact", themeToLight: "Switch to light mode", themeToDark: "Switch to dark mode" },
-                hero: { eyebrow: "available for work", title_pre: "Hi, I'm", title_post: "Full-Stack Developer.", lead: "I'm a student aiming to become a Fullstack Developer.", cta_primary: "See my projects →", cta_ghost: "Contact me" },
+                hero: { eyebrow: "available for work", title_pre: "Hi, I'm", title_post: "Full-Stack Developer.", lead: "I'm a student aiming to become a Fullstack Developer.", cta_primary: "See my projects →", cta_ghost: "Contact me", meta_role: "Fullstack Developer", meta_school: "Institut Teknologi Del", meta_location: "Jambi, Indonesia" },
                 about: { tag: "01 · about", heading: "A little about me", comment_lead: "My profile:", comment_body: "I was born in Jambi on September 22, 2007. I'm currently a student at Institut Teknologi Del, majoring in D3 Information Technology. My focus is on becoming a Fullstack Developer.", fact_location: "Location", fact_focus: "Focus", fact_focus_val: "Web & Apps", fact_exp: "Experience", fact_exp_val: "1+ year", fact_lang: "Favorite languages", fact_learning: "Currently learning", fact_learning_val: "Flutter" },
                 education: { tag: "02 · education", heading: "Educational background", items: [{ school: "Institut Teknologi Del", degree: "D3 Information Technology" }, { school: "SMA Negeri 2 Kota Jambi", degree: "Science Track" }] },
                 skills: { tag: "03 · skills", heading: "Languages &amp; technologies I work with" },
@@ -3391,7 +3463,7 @@
             },
             de: {
                 nav: { home: "Start", about: "Über mich", education: "Bildung", skills: "Fähigkeiten", activity: "Beiträge", projects: "Projekte", career: "Werdegang", contact: "Kontakt", themeToLight: "Zum hellen Modus wechseln", themeToDark: "Zum dunklen Modus wechseln" },
-                hero: { eyebrow: "verfügbar für Aufträge", title_pre: "Hallo, ich bin", title_post: "Full-Stack-Entwickler.", lead: "Ich bin Student und möchte Fullstack-Entwickler werden.", cta_primary: "Meine Projekte ansehen →", cta_ghost: "Kontaktiere mich" },
+                hero: { eyebrow: "verfügbar für Aufträge", title_pre: "Hallo, ich bin", title_post: "Full-Stack-Entwickler.", lead: "Ich bin Student und möchte Fullstack-Entwickler werden.", cta_primary: "Meine Projekte ansehen →", cta_ghost: "Kontaktiere mich", meta_role: "Fullstack-Entwickler", meta_school: "Institut Teknologi Del", meta_location: "Jambi, Indonesien" },
                 about: { tag: "01 · über mich", heading: "Ein bisschen über mich", comment_lead: "Mein Profil:", comment_body: "Ich wurde am 22. September 2007 in Jambi geboren. Ich studiere derzeit am Institut Teknologi Del im Studiengang D3 Informationstechnologie und spezialisiere mich auf Fullstack-Entwicklung.", fact_location: "Standort", fact_focus: "Fokus", fact_focus_val: "Web & Apps", fact_exp: "Erfahrung", fact_exp_val: "1+ Jahr", fact_lang: "Bevorzugte Sprachen", fact_learning: "Lerne gerade", fact_learning_val: "Flutter" },
                 education: { tag: "02 · bildung", heading: "Bildungshintergrund", items: [{ school: "Institut Teknologi Del", degree: "D3 Informationstechnologie" }, { school: "SMA Negeri 2 Kota Jambi", degree: "Naturwissenschaftlicher Zweig" }] },
                 skills: { tag: "03 · fähigkeiten", heading: "Sprachen &amp; Technologien, die ich beherrsche" },
@@ -3541,7 +3613,7 @@
 
         /* ================= SCROLL SPY (active nav link) ================= */
         const spySections = document.querySelectorAll('main section[id]');
-        const navLinks = document.querySelectorAll('nav a[href^="#"], .mobile-nav a[href^="#"]');
+        const navLinks = document.querySelectorAll('header nav a[href^="#"], .mobile-nav a[href^="#"]');
         const spyObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
