@@ -91,6 +91,12 @@
             }
         }
 
+        html {
+            /* Fluid base scale: text grows gently with viewport instead of
+               staying pinned to one fixed size from phone to 4K monitor. */
+            font-size: clamp(15px, 0.92vw + 11.5px, 18px);
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
@@ -148,6 +154,21 @@
             padding: 0 24px;
             position: relative;
             z-index: 2;
+        }
+
+        /* Wider canvases get more breathing room instead of an ever-widening
+           empty margin — the layout now scales up through large monitors. */
+        @media (min-width:1400px) {
+            .container {
+                max-width: 1240px;
+            }
+        }
+
+        @media (min-width:1800px) {
+            .container {
+                max-width: 1380px;
+                padding: 0 32px;
+            }
         }
 
         /* ---------- ATMOSPHERE LAYERS ---------- */
@@ -579,6 +600,15 @@
             }
         }
 
+        /* Tablet-width desktop nav: slightly tighter so seven Indonesian
+           labels plus controls don't crowd the header. */
+        @media (min-width:901px) and (max-width:1140px) {
+            nav a {
+                padding: 8px 8px;
+                font-size: 0.74rem;
+            }
+        }
+
         .nav-controls {
             display: flex;
             align-items: center;
@@ -875,7 +905,7 @@
 
         .hero h1 {
             font-family: var(--display);
-            font-size: clamp(2rem, 5.4vw, 3.9rem);
+            font-size: clamp(2.1rem, 5.4vw, 4.3rem);
             font-weight: 700;
             line-height: 1.08;
             letter-spacing: -0.015em;
@@ -1287,7 +1317,7 @@
 
         .section-head h2 {
             font-family: var(--display);
-            font-size: clamp(1.5rem, 3.4vw, 2.2rem);
+            font-size: clamp(1.6rem, 3.4vw, 2.5rem);
             font-weight: 600;
         }
 
@@ -1310,7 +1340,7 @@
             align-items: center;
         }
 
-        @media (max-width:760px) {
+        @media (max-width:860px) {
             .about-grid {
                 grid-template-columns: 1fr;
             }
@@ -1615,15 +1645,15 @@
 
         @media (max-width:760px) {
             .contrib-wrap {
-                --cell: 11px;
-                --cell-gap: 3px;
+                --cell: 13px;
+                --cell-gap: 3.5px;
             }
         }
 
         @media (max-width:420px) {
             .contrib-wrap {
-                --cell: 9px;
-                --cell-gap: 2.5px;
+                --cell: 11px;
+                --cell-gap: 3px;
             }
         }
 
@@ -2159,7 +2189,7 @@
             }
 
             .editor-body {
-                font-size: 0.76rem;
+                font-size: 0.84rem;
             }
 
             .line-numbers {
@@ -2172,6 +2202,7 @@
 
             .terminal {
                 padding: 20px;
+                font-size: 0.92rem;
             }
 
             .contact-links .btn {
@@ -2211,12 +2242,16 @@
 
             .theme-toggle,
             .nav-toggle {
-                width: 38px;
-                height: 38px;
+                width: 42px;
+                height: 42px;
+            }
+
+            .lang-current {
+                min-height: 42px;
             }
 
             .lang-dropdown {
-                min-width: 136px;
+                min-width: 150px;
             }
         }
 
@@ -2238,8 +2273,8 @@
 
             .hero-meta {
                 margin-top: 16px;
-                gap: 7px;
-                font-size: 0.74rem;
+                gap: 9px;
+                font-size: 0.86rem;
             }
 
             .hero-cta {
@@ -2262,41 +2297,50 @@
             }
 
             .section-tag {
-                font-size: 0.74rem;
+                font-size: 0.86rem;
             }
 
-            /* Comment block + facts breathe better stacked */
+            /* Comment block + facts breathe better stacked, and read bigger */
             .comment-block {
-                padding: 18px;
-                font-size: 0.88rem;
+                padding: 20px;
+                font-size: 0.98rem;
             }
 
             .fact {
-                font-size: 0.8rem;
-                padding: 9px 0;
+                font-size: 0.92rem;
+                padding: 11px 0;
             }
 
-            /* Education cards */
+            /* Education cards: keep the crest large and legible on phones */
             .edu-logo-wrap {
-                width: 72px;
-                height: 72px;
-                border-radius: 12px;
+                width: 84px;
+                height: 84px;
+                border-radius: 14px;
             }
 
             .edu-info h3 {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
             }
 
-            /* Skill badges slightly smaller so more are visible at once */
+            .edu-degree {
+                font-size: 1.02rem;
+            }
+
+            .edu-year {
+                font-size: 0.92rem;
+            }
+
+            /* Skill badges stay large and tappable on phones instead of
+               shrinking down — easier to see and to tap. */
             .skill-badge {
-                width: 68px;
-                height: 68px;
-                border-radius: 16px;
+                width: 78px;
+                height: 78px;
+                border-radius: 18px;
             }
 
             .skill-badge img {
-                width: 34px;
-                height: 34px;
+                width: 40px;
+                height: 40px;
             }
 
             /* Contribution heatmap: show the swipe hint, keep the grid legible */
@@ -2310,7 +2354,7 @@
             }
 
             .contrib-summary {
-                font-size: 0.8rem;
+                font-size: 0.9rem;
             }
 
             /* Projects: single column reads much better than a cramped 2-up */
@@ -2378,6 +2422,48 @@
             }
         }
 
+        /* ================= LARGE DESKTOP / ULTRA-WIDE PASS ================= */
+        @media (min-width:1400px) {
+            .skill-badge {
+                width: 96px;
+                height: 96px;
+                border-radius: 22px;
+            }
+
+            .skill-badge img {
+                width: 50px;
+                height: 50px;
+            }
+
+            .edu-logo-wrap {
+                width: 104px;
+                height: 104px;
+                border-radius: 18px;
+            }
+
+            .edu-info h3 {
+                font-size: 1.45rem;
+            }
+
+            .contrib-wrap {
+                --cell: 17px;
+                --cell-gap: 4.5px;
+            }
+
+            .editor-body {
+                min-height: 260px;
+                font-size: 0.95rem;
+            }
+
+            .profile-frame {
+                width: min(300px, 24vw);
+            }
+
+            .project-grid {
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            }
+        }
+
         @media (max-width:420px) {
 
             .boot-visual {
@@ -2404,8 +2490,8 @@
             }
 
             .tag-row span {
-                font-size: 0.78rem;
-                padding: 6px 11px;
+                font-size: 0.86rem;
+                padding: 7px 13px;
             }
         }
     </style>
