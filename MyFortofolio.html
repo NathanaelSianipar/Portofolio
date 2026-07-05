@@ -97,6 +97,11 @@
             font-size: clamp(15px, 0.92vw + 11.5px, 18px);
         }
 
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             background: var(--bg);
             color: var(--text);
@@ -150,10 +155,12 @@
 
         .container {
             max-width: 1080px;
+            width: 100%;
             margin: 0 auto;
             padding: 0 24px;
             position: relative;
             z-index: 2;
+            box-sizing: border-box;
         }
 
         /* Wider canvases get more breathing room instead of an ever-widening
@@ -368,6 +375,9 @@
 
         .boot-box {
             width: min(420px, 86vw);
+            max-width: 100%;
+            box-sizing: border-box;
+            padding: 0 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -456,20 +466,22 @@
         .boot-name {
             font-family: var(--display);
             font-weight: 600;
-            font-size: clamp(0.92rem, 4.4vw, 1.05rem);
+            font-size: clamp(0.85rem, 4.4vw, 1.05rem);
             color: var(--text);
             letter-spacing: 0.01em;
             margin-bottom: 6px;
             text-align: center;
+            word-break: break-word;
         }
 
         .boot-status {
             color: var(--text-muted);
-            font-size: clamp(0.72rem, 3.4vw, 0.82rem);
+            font-size: clamp(0.68rem, 3.2vw, 0.82rem);
             min-height: 1.4em;
             margin-bottom: 22px;
             text-align: center;
             padding: 0 8px;
+            word-break: break-word;
         }
 
         .boot-status::before {
@@ -521,6 +533,8 @@
             backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border);
             transition: background-color 0.4s ease, border-color 0.4s ease;
+            max-width: 100%;
+            overflow: hidden;
         }
 
         .nav-inner {
@@ -529,6 +543,7 @@
             justify-content: space-between;
             height: 60px;
             gap: 10px;
+            max-width: 100%;
         }
 
         .logo {
@@ -862,12 +877,16 @@
             padding: 48px 0 40px;
             display: grid;
             gap: 32px;
+            max-width: 100%;
+            overflow: hidden;
         }
 
         .container.hero {
             display: grid;
             gap: 36px;
             align-items: center;
+            grid-template-columns: 1fr;
+            min-width: 0;
         }
 
         @media (min-width:880px) {
@@ -875,6 +894,10 @@
                 grid-template-columns: 1.05fr 0.95fr;
                 gap: 48px;
             }
+        }
+
+        .container.hero > div {
+            min-width: 0;
         }
 
         .eyebrow {
@@ -909,6 +932,7 @@
             font-weight: 700;
             line-height: 1.08;
             letter-spacing: -0.015em;
+            overflow-wrap: break-word;
         }
 
         .hero h1 .glitch {
@@ -1100,6 +1124,8 @@
         /* ---------- EDITOR WINDOW ---------- */
         .editor-shell {
             position: relative;
+            min-width: 0;
+            max-width: 100%;
         }
 
         .editor-aura {
@@ -1135,6 +1161,9 @@
             box-shadow: 0 40px 90px -30px rgba(0, 0, 0, 0.8), 0 0 40px -10px rgba(47, 143, 255, 0.15);
             position: relative;
             z-index: 1;
+            max-width: 100%;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .editor::before {
@@ -1172,12 +1201,15 @@
             padding: 0 8px;
             position: relative;
             z-index: 1;
+            max-width: 100%;
+            min-width: 0;
         }
 
         .dots {
             display: flex;
             gap: 6px;
             padding: 0 10px;
+            flex-shrink: 0;
         }
 
         .dots span {
@@ -1202,6 +1234,7 @@
             display: flex;
             overflow-x: auto;
             scrollbar-width: none;
+            min-width: 0;
         }
 
         .tabs::-webkit-scrollbar {
@@ -1219,6 +1252,7 @@
             background: transparent;
             border-top: 2px solid transparent;
             transition: color 0.2s ease;
+            flex-shrink: 0;
         }
 
         .tab.active {
@@ -1238,6 +1272,8 @@
             min-height: 220px;
             position: relative;
             z-index: 1;
+            max-width: 100%;
+            min-width: 0;
         }
 
         .line-numbers {
@@ -1246,6 +1282,7 @@
             text-align: right;
             user-select: none;
             border-right: 1px solid var(--border);
+            flex-shrink: 0;
         }
 
         .line-numbers div {
@@ -1256,6 +1293,8 @@
             padding: 20px 22px;
             white-space: pre;
             flex: 1;
+            min-width: 0;
+            max-width: 100%;
             overflow-x: auto;
             color: #eaf1ff;
         }
@@ -1297,6 +1336,8 @@
             padding: 60px 0;
             border-top: 1px solid var(--border);
             transition: border-color 0.4s ease;
+            max-width: 100%;
+            overflow: hidden;
         }
 
         #beranda {
@@ -1641,6 +1682,7 @@
             scroll-behavior: smooth;
             transition: background-color 0.4s ease, border-color 0.4s ease;
             position: relative;
+            max-width: 100%;
         }
 
         @media (max-width:760px) {
@@ -2019,6 +2061,7 @@
             padding-top: 60px;
             background: linear-gradient(180deg, transparent, rgba(18, 58, 110, 0.08));
             transition: border-color 0.4s ease, background-color 0.4s ease;
+            max-width: 100%;
         }
 
         .footer-glow-line {
@@ -2492,6 +2535,30 @@
             .tag-row span {
                 font-size: 0.86rem;
                 padding: 7px 13px;
+            }
+        }
+
+        /* ================= EXTRA SMALL PHONES (<=380px) ================= */
+        @media (max-width:380px) {
+            .editor-body {
+                font-size: 0.7rem;
+            }
+
+            .line-numbers {
+                padding: 12px 6px;
+            }
+
+            .code-pane {
+                padding: 12px;
+            }
+
+            .tab {
+                padding: 8px 10px;
+                font-size: 0.72rem;
+            }
+
+            .boot-box {
+                width: min(300px, 88vw);
             }
         }
     </style>
