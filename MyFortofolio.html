@@ -184,6 +184,7 @@
             inset: 0;
             z-index: 0;
             opacity: 0.6;
+            pointer-events: none;
         }
 
         .noise-overlay {
@@ -528,13 +529,13 @@
         header {
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 500;
             background: var(--header-bg);
             backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--border);
             transition: background-color 0.4s ease, border-color 0.4s ease;
             max-width: 100%;
-            overflow: hidden;
+            overflow: visible;
         }
 
         .nav-inner {
@@ -629,6 +630,8 @@
             align-items: center;
             gap: 10px;
             flex-shrink: 0;
+            position: relative;
+            z-index: 5;
         }
 
         /* --- collapsible language switcher --- */
@@ -651,6 +654,10 @@
             align-items: center;
             gap: 6px;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 5;
         }
 
         .lang-current:hover,
@@ -675,6 +682,7 @@
             top: calc(100% + 8px);
             right: 0;
             min-width: 150px;
+            max-width: calc(100vw - 32px);
             background: var(--surface-solid);
             border: 1px solid var(--border);
             border-radius: 10px;
@@ -688,7 +696,7 @@
             transform: translateY(-6px) scale(0.97);
             transform-origin: top right;
             transition: opacity 0.16s ease, transform 0.16s ease, visibility 0.16s;
-            z-index: 120;
+            z-index: 620;
         }
 
         .lang-dropdown.open {
@@ -712,6 +720,9 @@
             justify-content: space-between;
             gap: 10px;
             transition: background-color 0.15s ease, color 0.15s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 40px;
         }
 
         .lang-option:hover {
@@ -742,6 +753,10 @@
             cursor: none;
             transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
             flex-shrink: 0;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            position: relative;
+            z-index: 5;
         }
 
         .theme-toggle:hover {
@@ -772,6 +787,9 @@
             position: relative;
             align-items: center;
             justify-content: center;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            z-index: 5;
         }
 
         @media (max-width:900px) {
@@ -819,37 +837,122 @@
 
         .mobile-nav {
             position: fixed;
-            inset: 60px 0 auto 0;
-            z-index: 99;
-            background: var(--surface-solid);
-            border-bottom: 1px solid var(--border);
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.28s ease;
-            box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+            inset: 0;
+            z-index: 490;
+            background: transparent;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .mobile-nav.open {
-            max-height: 70vh;
+            pointer-events: auto;
+            opacity: 1;
+        }
+
+        .mobile-nav-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(2, 4, 9, 0.55);
+            backdrop-filter: blur(3px);
+        }
+
+        .mobile-nav-panel {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: min(320px, 82vw);
+            background: var(--surface-solid);
+            border-left: 1px solid var(--border);
+            box-shadow: -30px 0 60px -20px rgba(0, 0, 0, 0.6);
+            transform: translateX(100%);
+            transition: transform 0.32s cubic-bezier(.2, .8, .2, 1);
+            display: flex;
+            flex-direction: column;
             overflow-y: auto;
+        }
+
+        .mobile-nav.open .mobile-nav-panel {
+            transform: translateX(0);
+        }
+
+        .mobile-nav-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            flex-shrink: 0;
+        }
+
+        .mobile-nav-head .logo {
+            font-size: 0.9rem;
+        }
+
+        .mobile-nav-close {
+            width: 38px;
+            height: 38px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: transparent;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-nav-close:hover {
+            border-color: var(--blue-bright);
+            color: var(--blue-bright);
         }
 
         .mobile-nav ul {
             display: flex;
             flex-direction: column;
-            padding: 8px 20px 20px;
+            padding: 10px 12px 24px;
         }
 
         .mobile-nav a {
             font-family: var(--mono);
-            font-size: 0.95rem;
-            padding: 14px 4px;
+            font-size: 1rem;
+            padding: 16px 12px;
             color: var(--text-muted);
             border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-radius: 8px;
+            opacity: 0;
+            transform: translateX(14px);
+            transition: color 0.2s ease, background-color 0.2s ease, opacity 0.3s ease, transform 0.3s ease;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-nav.open a {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .mobile-nav a::before {
+            content: '›';
+            color: var(--blue-bright);
+            font-size: 1.1rem;
+            opacity: 0.7;
         }
 
         .mobile-nav a:last-child {
             border-bottom: none;
+        }
+
+        .mobile-nav a:active,
+        .mobile-nav a:hover {
+            background: rgba(47, 143, 255, 0.1);
+            color: var(--text);
         }
 
         .mobile-nav a.active {
@@ -2627,7 +2730,15 @@
                     aria-expanded="false"><span></span></button>
             </div>
         </div>
-        <div class="mobile-nav" id="mobileNav">
+    </header>
+
+    <div class="mobile-nav" id="mobileNav">
+        <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+        <div class="mobile-nav-panel">
+            <div class="mobile-nav-head">
+                <div class="logo">Nathan</div>
+                <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Tutup menu">✕</button>
+            </div>
             <ul>
                 <li><a href="#beranda" data-i18n="nav.home">Beranda</a></li>
                 <li><a href="#tentang" data-i18n="nav.about">Tentang</a></li>
@@ -2638,7 +2749,7 @@
                 <li><a href="#pengalaman" data-i18n="nav.career">Pengalaman</a></li>
             </ul>
         </div>
-    </header>
+    </div>
 
     <main>
 
@@ -3751,18 +3862,31 @@
         /* ================= MOBILE NAV ================= */
         const navToggle = document.getElementById('navToggle');
         const mobileNav = document.getElementById('mobileNav');
+        const mobileNavClose = document.getElementById('mobileNavClose');
+        const mobileNavBackdrop = document.getElementById('mobileNavBackdrop');
+
+        function openMobileNav() {
+            mobileNav.classList.add('open');
+            navToggle.classList.add('open');
+            navToggle.setAttribute('aria-expanded', 'true');
+            document.body.style.overflow = 'hidden';
+        }
         function closeMobileNav() {
             mobileNav.classList.remove('open');
             navToggle.classList.remove('open');
             navToggle.setAttribute('aria-expanded', 'false');
+            document.body.style.overflow = '';
         }
         navToggle.addEventListener('click', () => {
-            const willOpen = !mobileNav.classList.contains('open');
-            mobileNav.classList.toggle('open', willOpen);
-            navToggle.classList.toggle('open', willOpen);
-            navToggle.setAttribute('aria-expanded', String(willOpen));
+            if (mobileNav.classList.contains('open')) closeMobileNav();
+            else openMobileNav();
         });
+        mobileNavClose.addEventListener('click', closeMobileNav);
+        mobileNavBackdrop.addEventListener('click', closeMobileNav);
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMobileNav(); });
         mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
+        // Close the mobile menu automatically if the viewport grows back to desktop width
+        window.addEventListener('resize', () => { if (window.innerWidth > 900) closeMobileNav(); });
 
         /* ================= SCROLL SPY (active nav link) ================= */
         const spySections = document.querySelectorAll('main section[id]');
