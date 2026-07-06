@@ -2047,6 +2047,8 @@
             border-radius: var(--radius);
             padding: 22px;
             transition: background-color 0.4s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         .education-card:hover {
@@ -3107,6 +3109,117 @@
                 width: min(300px, 88vw);
             }
         }
+
+        /* ================= EDITOR SHELL: KEEP AWAY FROM RIGHT EDGE ON LAPTOPS ================= */
+        @media (min-width:880px) {
+            .editor-shell {
+                max-width: 500px;
+                margin-left: 0;
+                margin-right: auto;
+            }
+        }
+
+        @media (min-width:1400px) {
+            .editor-shell {
+                max-width: 560px;
+            }
+        }
+
+        /* ================= SR-ONLY (for accessible heading text) ================= */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* ================= SMOOTH HEADING REVEAL (replaces the scramble/glitch text) ================= */
+        .section-head h2 .char-track {
+            display: inline-block;
+        }
+
+        .section-head h2 .char-reveal {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(16px);
+            filter: blur(5px);
+            animation: charRise 0.65s cubic-bezier(.16, .84, .3, 1) forwards;
+        }
+
+        @keyframes charRise {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+                filter: blur(0);
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .section-head h2 .char-reveal {
+                opacity: 1;
+                transform: none;
+                filter: none;
+                animation: none;
+            }
+        }
+
+        /* Underline sweep that draws itself in under each heading once revealed */
+        .section-head h2 {
+            position: relative;
+            display: inline-block;
+            padding-bottom: 6px;
+        }
+
+        .section-head h2::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            height: 2px;
+            width: 0%;
+            background: linear-gradient(90deg, var(--blue-bright), var(--mint));
+            box-shadow: 0 0 10px rgba(47, 143, 255, 0.5);
+            transition: width 0.9s cubic-bezier(.16, .84, .3, 1) 0.15s;
+        }
+
+        .section-head.reveal.in h2::after {
+            width: 100%;
+        }
+
+        /* ================= EXTRA POLISH: CARD SHEEN SWEEP ================= */
+        .project-card::after,
+        .education-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -60%;
+            width: 35%;
+            height: 100%;
+            background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+            transform: skewX(-18deg);
+            transition: left 0.75s ease;
+            pointer-events: none;
+        }
+
+        .project-card:hover::after,
+        .education-card:hover::after {
+            left: 130%;
+        }
+
+        /* Contribution total number ticks up smoothly; keep width stable while it counts */
+        .contrib-summary strong {
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Slightly livelier press feedback on buttons */
+        .btn:active {
+            transform: scale(0.96);
+        }
     </style>
 </head>
 
@@ -3889,40 +4002,40 @@
             }, 2500);
         });
 
-        /* ---------- Decode/scramble reveal for section headings ---------- */
-        function scrambleText(el, finalText, duration) {
-            const glyphs = '!<>-_\\/[]{}—=+*^?#01';
-            const start = performance.now();
-            function frame(now) {
-                const progress = Math.min((now - start) / duration, 1);
-                const revealCount = Math.floor(progress * finalText.length);
-                let out = '';
-                for (let i = 0; i < finalText.length; i++) {
-                    if (i < revealCount || finalText[i] === ' ') {
-                        out += finalText[i];
-                    } else {
-                        out += glyphs[Math.floor(Math.random() * glyphs.length)];
-                    }
-                }
-                el.textContent = out;
-                if (progress < 1) requestAnimationFrame(frame);
-                else el.textContent = finalText;
-            }
-            requestAnimationFrame(frame);
+        /* ---------- Smooth character reveal for section headings (replaces the old scramble effect) ---------- */
+        function buildCharReveal(el, finalText, stepMs) {
+            el.setAttribute('aria-label', finalText);
+            const track = document.createElement('span');
+            track.className = 'char-track';
+            track.setAttribute('aria-hidden', 'true');
+            finalText.split('').forEach((ch, i) => {
+                const span = document.createElement('span');
+                span.className = 'char-reveal';
+                span.style.animationDelay = (i * stepMs) + 'ms';
+                span.textContent = ch === ' ' ? '\u00A0' : ch;
+                track.appendChild(span);
+            });
+            const srText = document.createElement('span');
+            srText.className = 'sr-only';
+            srText.textContent = finalText;
+
+            el.innerHTML = '';
+            el.appendChild(track);
+            el.appendChild(srText);
         }
 
-        safe('heading-scramble', function () {
+        safe('heading-reveal', function () {
             if (reduceMotion) return;
-            const scrambleTargets = document.querySelectorAll('.section-head h2');
-            const scrambleObserver = new IntersectionObserver((entries) => {
+            const revealTargets = document.querySelectorAll('.section-head h2');
+            const revealObserver = new IntersectionObserver((entries) => {
                 entries.forEach(e => {
                     if (e.isIntersecting) {
-                        scrambleText(e.target, e.target.textContent.trim(), 550);
-                        scrambleObserver.unobserve(e.target);
+                        buildCharReveal(e.target, e.target.textContent.trim(), 16);
+                        revealObserver.unobserve(e.target);
                     }
                 });
             }, { threshold: 0.4 });
-            scrambleTargets.forEach(el => scrambleObserver.observe(el));
+            revealTargets.forEach(el => revealObserver.observe(el));
         });
 
         /* ---------- Skills marquee with logos + name tooltip ---------- */
@@ -4085,6 +4198,20 @@
             tooltip.classList.add('show');
         }
 
+        function animateCount(el, target, duration) {
+            if (reduceMotion) { el.textContent = target.toLocaleString(localeByLang[currentLang] || 'id-ID'); return; }
+            const start = performance.now();
+            function frame(now) {
+                const progress = Math.min((now - start) / duration, 1);
+                const eased = 1 - Math.pow(1 - progress, 3);
+                const value = Math.round(eased * target);
+                el.textContent = value.toLocaleString(localeByLang[currentLang] || 'id-ID');
+                if (progress < 1) requestAnimationFrame(frame);
+                else el.textContent = target.toLocaleString(localeByLang[currentLang] || 'id-ID');
+            }
+            requestAnimationFrame(frame);
+        }
+
         function renderHeatmap(days) {
             const contribCols = document.getElementById('contribCols');
             const contribMonths = document.getElementById('contribMonths');
@@ -4096,7 +4223,7 @@
 
             contribDays = days;
             totalContribs = days.reduce((s, d) => s + d.count, 0);
-            contribTotalEl.textContent = totalContribs.toLocaleString(localeByLang[currentLang] || 'id-ID');
+            animateCount(contribTotalEl, totalContribs, 900);
 
             contribCols.innerHTML = '';
             contribMonths.innerHTML = '';
