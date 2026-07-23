@@ -382,7 +382,7 @@
         { name: 'PHP', slug: 'php' },
         { name: 'JavaScript', slug: 'javascript' },
         { name: 'HTML', slug: 'html5' },
-        { name: 'CSS', slug: 'css3' },
+        { name: 'CSS', slug: 'css' },
         { name: 'Python', slug: 'python' },
         { name: 'Go', slug: 'go' },
         { name: 'Rust', slug: 'rust' },
